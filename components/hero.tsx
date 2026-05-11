@@ -17,8 +17,8 @@ function fadeUp(delay: number) {
 }
 
 const STATS = [
-  { value: "15+", label: "Års erfarenhet" },
-  { value: "500+", label: "Genomförda projekt" },
+  { value: "30+", label: "Års erfarenhet" },
+  { value: "5000+", label: "Genomförda projekt" },
   { value: "100%", label: "Nöjda kunder" },
 ];
 

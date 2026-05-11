@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -8,10 +8,10 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
 const NAV_LINKS = [
-  { label: "Tjänster", href: "#tjanster" },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "Om oss", href: "#om-oss" },
-  { label: "Kontakt", href: "#kontakt" },
+  { label: "Tjänster", href: "#tjanster", id: "tjanster" },
+  { label: "Portfolio", href: "#portfolio", id: "portfolio" },
+  { label: "Om oss", href: "#om-oss", id: "om-oss" },
+  { label: "Kontakt", href: "#kontakt", id: "kontakt" },
 ];
 
 export default function Navbar() {
@@ -24,6 +24,19 @@ export default function Navbar() {
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const scrollToSection = useCallback(
+    (id: string, closeMenu = false) =>
+      (e: React.MouseEvent) => {
+        e.preventDefault();
+        if (closeMenu) setOpen(false);
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.scrollIntoView({ behavior: "smooth" });
+        history.pushState(null, "", `#${id}`);
+      },
+    []
+  );
 
   return (
     <header
@@ -49,28 +62,30 @@ export default function Navbar() {
           {/* Desktop links */}
           <ul className="hidden items-center gap-8 lg:flex">
             {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link
+              <li key={link.id}>
+                <a
                   href={link.href}
+                  onClick={scrollToSection(link.id)}
                   className="text-sm font-medium text-white/75 transition-colors hover:text-white"
                 >
                   {link.label}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
 
           <div className="flex items-center gap-3">
             {/* Desktop CTA */}
-            <Link
+            <a
               href="#kontakt"
+              onClick={scrollToSection("kontakt")}
               className={cn(
                 buttonVariants({ size: "lg" }),
                 "hidden border-transparent bg-brand-orange text-white hover:bg-brand-orange/90 lg:inline-flex"
               )}
             >
               Få offert idag
-            </Link>
+            </a>
 
             {/* Mobile hamburger */}
             <button
@@ -98,26 +113,26 @@ export default function Navbar() {
           >
             <div className="mx-auto max-w-7xl space-y-1 px-6 py-4">
               {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
+                <a
+                  key={link.id}
                   href={link.href}
-                  onClick={() => setOpen(false)}
+                  onClick={scrollToSection(link.id, true)}
                   className="block rounded-lg px-3 py-3 text-base font-medium text-white/80 transition-colors hover:bg-white/5 hover:text-white"
                 >
                   {link.label}
-                </Link>
+                </a>
               ))}
               <div className="pt-3">
-                <Link
+                <a
                   href="#kontakt"
-                  onClick={() => setOpen(false)}
+                  onClick={scrollToSection("kontakt", true)}
                   className={cn(
                     buttonVariants({ size: "lg" }),
                     "w-full border-transparent bg-brand-orange text-white hover:bg-brand-orange/90"
                   )}
                 >
                   Få offert idag
-                </Link>
+                </a>
               </div>
             </div>
           </motion.div>

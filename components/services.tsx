@@ -1,7 +1,9 @@
 "use client";
 
+import { useRef, useEffect, useState } from "react";
 import {
   motion,
+  useAnimation,
   useMotionValue,
   useAnimationFrame,
   useMotionTemplate,
@@ -113,6 +115,114 @@ const headingVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
 };
 
+/* ─── Service card ───────────────────────────────────────────────────── */
+
+type ServiceItem = (typeof SERVICES)[number];
+
+function buildRoundedRectPath(W: number, H: number, rx: number): string {
+  // Explicit path starting at the bottom-left arc → draws clockwise:
+  // bottom edge → right side → top edge → left side → back to start.
+  // Animating pathLength 0→1 therefore draws from bottom-left all the way round.
+  return [
+    `M ${rx} ${H}`,
+    `H ${W - rx}`,
+    `Q ${W} ${H} ${W} ${H - rx}`,
+    `V ${rx}`,
+    `Q ${W} 0 ${W - rx} 0`,
+    `H ${rx}`,
+    `Q 0 0 0 ${rx}`,
+    `V ${H - rx}`,
+    `Q 0 ${H} ${rx} ${H}`,
+  ].join(" ");
+}
+
+function ServiceCard({ service }: { service: ServiceItem }) {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [pathD, setPathD] = useState("");
+  const isHoveredRef = useRef(false);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const build = () => {
+      const svg = svgRef.current;
+      if (!svg) return;
+      const { width: W, height: H } = svg.getBoundingClientRect();
+      if (!W || !H) return;
+      // rx=15: rounded-2xl outer radius (16 px) minus the 1 px CSS border
+      setPathD(buildRoundedRectPath(W, H, 15));
+    };
+
+    build();
+    const ro = new ResizeObserver(build);
+    if (svgRef.current) ro.observe(svgRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  function handleHoverStart() {
+    isHoveredRef.current = true;
+    controls.stop();
+    controls.set({ pathLength: 0, opacity: 1 });
+    controls.start({ pathLength: 1, transition: { duration: 1.0, ease: "linear" } });
+  }
+
+  async function handleHoverEnd() {
+    isHoveredRef.current = false;
+    controls.stop();
+    await controls.start({ opacity: 0, transition: { duration: 0.35 } });
+    if (!isHoveredRef.current) {
+      controls.set({ pathLength: 0, opacity: 0 });
+    }
+  }
+
+  return (
+    <motion.li
+      variants={cardVariants}
+      onHoverStart={handleHoverStart}
+      onHoverEnd={handleHoverEnd}
+      className="group relative flex flex-col rounded-2xl border border-gray-200/80 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+    >
+      {/* Border: explicit path starts at bottom-left, pathLength 0→1 draws one full lap */}
+      <svg
+        ref={svgRef}
+        className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+        aria-hidden="true"
+      >
+        {pathD && (
+          <motion.path
+            d={pathD}
+            fill="none"
+            stroke="#FF6200"
+            strokeWidth="2"
+            strokeLinecap="round"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={controls}
+          />
+        )}
+      </svg>
+
+      {/* Icon */}
+      <div className="mb-5 inline-flex w-fit items-center justify-center rounded-xl bg-brand-orange/10 p-3 transition-colors duration-300 group-hover:bg-brand-orange/15">
+        <HugeiconsIcon
+          icon={service.icon}
+          size={26}
+          className="text-brand-orange"
+          strokeWidth={1.6}
+        />
+      </div>
+
+      <h3 className="text-lg font-semibold text-brand-navy">{service.title}</h3>
+      <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-500">
+        {service.description}
+      </p>
+
+      <div className="mt-6 flex items-center gap-1 text-sm font-medium text-brand-orange opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        Begär offert
+        <ArrowUpRight size={15} />
+      </div>
+    </motion.li>
+  );
+}
+
 /* ─── Section ────────────────────────────────────────────────────────── */
 
 export default function Services() {
@@ -196,35 +306,7 @@ export default function Services() {
           className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
           {SERVICES.map((service) => (
-            <motion.li
-              key={service.title}
-              variants={cardVariants}
-              className="group relative flex flex-col rounded-2xl border border-gray-200/80 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-orange/30 hover:shadow-md"
-            >
-              {/* Icon */}
-              <div className="mb-5 inline-flex w-fit items-center justify-center rounded-xl bg-brand-orange/10 p-3 transition-colors duration-300 group-hover:bg-brand-orange/15">
-                <HugeiconsIcon
-                  icon={service.icon}
-                  size={26}
-                  className="text-brand-orange"
-                  strokeWidth={1.6}
-                />
-              </div>
-
-              <h3 className="text-lg font-semibold text-brand-navy">
-                {service.title}
-              </h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-gray-500">
-                {service.description}
-              </p>
-
-              <div className="mt-6 flex items-center gap-1 text-sm font-medium text-brand-orange opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                Begär offert
-                <ArrowUpRight size={15} />
-              </div>
-
-              <div className="absolute inset-y-0 left-0 w-0.5 rounded-l-2xl bg-brand-orange opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            </motion.li>
+            <ServiceCard key={service.title} service={service} />
           ))}
         </motion.ul>
       </div>
