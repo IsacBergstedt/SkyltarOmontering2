@@ -9,7 +9,8 @@
       "Bash(node -e \"const icons = require\\('@hugeicons/core-free-icons'\\); const keys = Object.keys\\(icons\\); console.log\\('Total:', keys.length\\); console.log\\(keys.filter\\(k => k.toLowerCase\\(\\).includes\\('sign'\\) || k.toLowerCase\\(\\).includes\\('car'\\) || k.toLowerCase\\(\\).includes\\('window'\\) || k.toLowerCase\\(\\).includes\\('tool'\\) || k.toLowerCase\\(\\).includes\\('wrench'\\) || k.toLowerCase\\(\\).includes\\('build'\\)\\).slice\\(0,20\\).join\\('\\\\n'\\)\\)\")",
       "Bash(node -e \"const h = require\\('@hugeicons/react'\\); const ic = require\\('@hugeicons/core-free-icons'\\); console.log\\('hugeicons/react keys:', JSON.stringify\\(Object.keys\\(h\\)\\)\\); console.log\\('core-free keys sample:', Object.keys\\(ic\\).slice\\(0,5\\)\\)\")",
       "Bash(Select-String -Pattern \"\\(Car|Building|Star|Medal|Check|Shield|Flash|Wrap|Light|Neon|Paint|Window|Store|Location|Phone|Checkmark\\)\")",
-      "Bash(Select-Object -First 40)"
+      "Bash(Select-Object -First 40)",
+      "WebFetch(domain:21st.dev)"
     ]
   }
 }
