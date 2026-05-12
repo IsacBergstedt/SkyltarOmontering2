@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { useQuoteModal } from "@/context/quote-modal";
 
 const NAV_LINKS = [
   { label: "Tjänster", href: "#tjanster", id: "tjanster" },
@@ -17,6 +18,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { openModal } = useQuoteModal();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -76,16 +78,15 @@ export default function Navbar() {
 
           <div className="flex items-center gap-3">
             {/* Desktop CTA */}
-            <a
-              href="#kontakt"
-              onClick={scrollToSection("kontakt")}
+            <button
+              onClick={openModal}
               className={cn(
                 buttonVariants({ size: "lg" }),
                 "hidden border-transparent bg-brand-orange text-white hover:bg-brand-orange/90 lg:inline-flex"
               )}
             >
               Få offert idag
-            </a>
+            </button>
 
             {/* Mobile hamburger */}
             <button
@@ -123,16 +124,15 @@ export default function Navbar() {
                 </a>
               ))}
               <div className="pt-3">
-                <a
-                  href="#kontakt"
-                  onClick={scrollToSection("kontakt", true)}
+                <button
+                  onClick={() => { setOpen(false); openModal(); }}
                   className={cn(
                     buttonVariants({ size: "lg" }),
                     "w-full border-transparent bg-brand-orange text-white hover:bg-brand-orange/90"
                   )}
                 >
                   Få offert idag
-                </a>
+                </button>
               </div>
             </div>
           </motion.div>

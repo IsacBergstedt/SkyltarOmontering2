@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { useQuoteModal } from "@/context/quote-modal";
 
 const ease = [0.21, 0.47, 0.32, 0.98] as const;
 
@@ -23,6 +23,7 @@ const STATS = [
 ];
 
 export default function Hero() {
+  const { openModal } = useQuoteModal();
   return (
     <section className="relative flex min-h-screen items-center overflow-hidden bg-brand-navy">
       {/* Orange glow – top right */}
@@ -79,8 +80,8 @@ export default function Hero() {
             {...fadeUp(0.45)}
             className="mt-10 flex flex-col gap-3 sm:flex-row"
           >
-            <Link
-              href="#kontakt"
+            <button
+              onClick={openModal}
               className={cn(
                 buttonVariants({ size: "lg" }),
                 "gap-2 border-transparent bg-brand-orange text-white hover:bg-brand-orange/90"
@@ -88,8 +89,8 @@ export default function Hero() {
             >
               Få offert idag
               <ArrowRight size={17} />
-            </Link>
-            <Link
+            </button>
+            <a
               href="#portfolio"
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
@@ -97,7 +98,7 @@ export default function Hero() {
               )}
             >
               Se våra projekt
-            </Link>
+            </a>
           </motion.div>
 
           {/* Stats */}

@@ -10,7 +10,10 @@
       "Bash(node -e \"const h = require\\('@hugeicons/react'\\); const ic = require\\('@hugeicons/core-free-icons'\\); console.log\\('hugeicons/react keys:', JSON.stringify\\(Object.keys\\(h\\)\\)\\); console.log\\('core-free keys sample:', Object.keys\\(ic\\).slice\\(0,5\\)\\)\")",
       "Bash(Select-String -Pattern \"\\(Car|Building|Star|Medal|Check|Shield|Flash|Wrap|Light|Neon|Paint|Window|Store|Location|Phone|Checkmark\\)\")",
       "Bash(Select-Object -First 40)",
-      "WebFetch(domain:21st.dev)"
+      "WebFetch(domain:21st.dev)",
+      "Bash(npx next *)",
+      "Bash(npx shadcn@latest *)",
+      "Bash(Get-Content \"C:\\\\Users\\\\isacb\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Hemsidor-Skylttest-skylttest\\\\86b5fbf1-e296-4603-b61a-f9e06d557578\\\\tasks\\\\bj8zud3gs.output\" -Wait -Tail 30)"
     ]
   }
 }

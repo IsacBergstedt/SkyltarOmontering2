@@ -11,6 +11,7 @@ import {
 } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useQuoteModal } from "@/context/quote-modal";
 import {
   ShopSignIcon,
   Car01Icon,
@@ -137,6 +138,7 @@ function buildRoundedRectPath(W: number, H: number, rx: number): string {
 }
 
 function ServiceCard({ service }: { service: ServiceItem }) {
+  const { openModal } = useQuoteModal();
   const svgRef = useRef<SVGSVGElement>(null);
   const [pathD, setPathD] = useState("");
   const isHoveredRef = useRef(false);
@@ -215,10 +217,13 @@ function ServiceCard({ service }: { service: ServiceItem }) {
         {service.description}
       </p>
 
-      <div className="mt-6 flex items-center gap-1 text-sm font-medium text-brand-orange opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <button
+        onClick={openModal}
+        className="mt-6 flex items-center gap-1 text-sm font-medium text-brand-orange opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      >
         Begär offert
         <ArrowUpRight size={15} />
-      </div>
+      </button>
     </motion.li>
   );
 }

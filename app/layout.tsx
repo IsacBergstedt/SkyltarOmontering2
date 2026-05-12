@@ -3,6 +3,8 @@ import { Figtree } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/navbar";
+import QuoteModal from "@/components/quote-modal";
+import { QuoteModalProvider } from "@/context/quote-modal";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -20,8 +22,11 @@ export default function RootLayout({
   return (
     <html lang="sv" className={cn("h-full antialiased", figtree.variable)}>
       <body className="min-h-full flex flex-col font-sans">
-        <Navbar />
-        {children}
+        <QuoteModalProvider>
+          <Navbar />
+          {children}
+          <QuoteModal />
+        </QuoteModalProvider>
       </body>
     </html>
   );
