@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -56,15 +57,34 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          {/* Headline */}
-          <motion.h1
+          {/* Metal sign image – replaces the text headline visually */}
+          <h1 className="sr-only">Skyltar som syns. Montering som håller.</h1>
+
+          <motion.div
             {...fadeUp(0.15)}
-            className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl xl:text-[4.5rem]"
+            className="mt-6"
           >
-            Skyltar som syns.
-            <br />
-            <span className="text-brand-orange">Montering</span> som håller.
-          </motion.h1>
+            <motion.div
+              initial={{ rotate: -1.5 }}
+              animate={{ rotate: 0 }}
+              transition={{
+                type: "spring",
+                stiffness: 60,
+                damping: 10,
+                delay: 0.8,
+              }}
+              style={{ transformOrigin: "top center" }}
+            >
+              <Image
+                src="/images/heroskyltmetall.png"
+                alt="Skyltar som syns. Montering som håller."
+                width={1400}
+                height={700}
+                priority
+                className="w-full max-w-2xl rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.55)]"
+              />
+            </motion.div>
+          </motion.div>
 
           {/* Body copy */}
           <motion.p
