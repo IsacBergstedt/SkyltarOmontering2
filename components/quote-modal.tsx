@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useRef, type FormEvent } from "react";
 import { EB_Garamond } from "next/font/google";
 import { Dialog } from "@base-ui/react/dialog";
-
-const garamond = EB_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+import { motion } from "framer-motion";
 import { X, CheckCircle2, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useQuoteModal } from "@/context/quote-modal";
+
+const garamond = EB_Garamond({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 
 const SERVICES = [
   "Skyltmontering",
@@ -27,13 +28,7 @@ type FormState = {
   meddelande: string;
 };
 
-const EMPTY: FormState = {
-  namn: "",
-  epost: "",
-  telefon: "",
-  tjanst: "",
-  meddelande: "",
-};
+const EMPTY: FormState = { namn: "", epost: "", telefon: "", tjanst: "", meddelande: "" };
 
 function Field({
   label,
@@ -45,10 +40,10 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-base font-medium text-black drop-shadow-sm">
+    <label className="flex flex-col gap-1">
+      <span className="text-sm font-semibold uppercase tracking-wide text-gray-500">
         {label}
-        {required && <span className="ml-0.5 text-black">*</span>}
+        {required && <span className="ml-0.5 text-brand-orange">*</span>}
       </span>
       {children}
     </label>
@@ -56,10 +51,26 @@ function Field({
 }
 
 const inputClass =
-  "w-full rounded-xl border-2 border-black bg-transparent px-4 py-3 text-base text-black outline-none placeholder:text-black transition-colors focus:border-black focus:ring-2 focus:ring-black/20";
+  "w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-900 outline-none placeholder:text-gray-400 transition-colors focus:border-brand-navy focus:ring-2 focus:ring-brand-navy/15";
+
+const signVariants = {
+  open: {
+    y: 0,
+    rotate: 0,
+    opacity: 1,
+    transition: { type: "spring" as const, damping: 14, stiffness: 90, mass: 1.4 },
+  },
+  closed: {
+    y: -70,
+    rotate: -3,
+    opacity: 0,
+    transition: { duration: 0.22, ease: "easeIn" as const },
+  },
+};
 
 export default function QuoteModal() {
   const { open, setOpen } = useQuoteModal();
+  const actionsRef = useRef<Dialog.Root.Actions | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -71,10 +82,7 @@ export default function QuoteModal() {
 
   function handleClose() {
     setOpen(false);
-    setTimeout(() => {
-      setForm(EMPTY);
-      setSent(false);
-    }, 300);
+    setTimeout(() => { setForm(EMPTY); setSent(false); }, 500);
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -86,96 +94,126 @@ export default function QuoteModal() {
   }
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root open={open} onOpenChange={setOpen} actionsRef={actionsRef}>
       <Dialog.Portal>
-        {/* Backdrop */}
-        <Dialog.Backdrop className="fixed inset-0 z-50 bg-brand-navy/60 backdrop-blur-sm transition-opacity duration-300 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0" />
+        <Dialog.Backdrop className="fixed inset-0 z-50 bg-brand-navy/65 backdrop-blur-sm transition-opacity duration-300 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0" />
 
-        {/* Popup wrapper – scrollable on small screens */}
-        <Dialog.Popup className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden">
-          <div
-            className={cn(
-              "relative w-full max-w-xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden",
-              "bg-cover bg-center bg-no-repeat",
-              "transition-all duration-300",
-              "data-[starting-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:translate-y-4",
-              "data-[ending-style]:opacity-0 data-[ending-style]:scale-95 data-[ending-style]:translate-y-4"
-            )}
-            style={{ 
-              backgroundImage: "url('/images/steelcard.png')",
-              backgroundAttachment: "fixed"
+        <Dialog.Popup className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto pt-[0vh] pb-10 px-4">
+          <motion.div
+            className="relative w-full max-w-2xl"
+            style={{ transformOrigin: "top center" }}
+            animate={open ? "open" : "closed"}
+            initial="closed"
+            variants={signVariants}
+            onAnimationComplete={(def) => {
+              if (def === "closed") actionsRef.current?.unmount();
             }}
           >
-            {/* Content */}
-            <div className={`${garamond.className} font-medium relative z-10 overflow-y-auto max-h-[90vh]`}>
-            <div className="px-7 pb-8 pt-6">
-                {/* Header */}
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <Dialog.Title className="text-2xl font-bold text-black drop-shadow-sm">
-                      Begär offert
-                    </Dialog.Title>
-                    <Dialog.Description className="mt-1 text-base text-black drop-shadow-sm">
-                      Fyll i formuläret så återkommer vi inom 24 timmar.
-                    </Dialog.Description>
-                  </div>
-                  <Dialog.Close
-                    onClick={handleClose}
-                    className="rounded-lg p-1.5 text-black transition-colors hover:bg-white/20 drop-shadow-sm"
-                    aria-label="Stäng"
-                  >
-                    <X size={18} />
-                  </Dialog.Close>
-                </div>
+            {/* Ceiling hooks — painted above the sign via z-20 */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/jagtappardet.png"
+              alt=""
+              className="relative z-10 w-full h-[438px] object-cover object-center pointer-events-none select-none"
+              draggable={false}
+            />
 
-                {/* Content */}
+            {/* Wrapper: no z-index → grommet z-[15] resolves in motion.div context, above sign, below img z-20 */}
+            <div className="relative w-full -mt-[140px]">
+
+              {/* Grommet rings — siblings of sign so the sign's CSS mask does NOT clip them */}
+              <div
+                className="pointer-events-none absolute z-[25] size-8 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                style={{
+                  top: "47px",
+                  left: "calc(50% - 187px)",
+                  background:
+                    "radial-gradient(circle, transparent 0 100%, #777 100%, #ccc 47%, #aaa 55%, #e0e0e0 63%, #999 71%, transparent 76%)",
+                  filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.65))",
+                }}
+              />
+              <div
+                className="pointer-events-none absolute z-[25] size-8 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                style={{
+                  top: "47px",
+                  left: "calc(50% + 187px)",
+                  background:
+                    "radial-gradient(circle, transparent 0 100%, #777 100%, #ccc 47%, #aaa 55%, #e0e0e0 63%, #999 71%, transparent 76%)",
+                  filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.65))",
+                }}
+              />
+
+              {/* White sign — CSS mask punches two transparent holes matching carabiner positions */}
+              <div
+                className={cn(
+                  "relative z-20 w-full bg-white rounded-b-2xl",
+                  "shadow-[0_30px_90px_-10px_rgba(0,0,0,0.55),0_10px_30px_-5px_rgba(0,0,0,0.2)]",
+                )}
+                style={{
+                  mask: "radial-gradient(circle 8px at calc(50% - 183px) 47px, transparent 8px, black 9px), radial-gradient(circle 8px at calc(50% + 183px) 47px, transparent 8px, black 9px)",
+                  maskComposite: "intersect",
+                  WebkitMask: "radial-gradient(circle 8px at calc(50% - 183px) 47px, transparent 8px, black 9px), radial-gradient(circle 8px at calc(50% + 183px) 47px, transparent 8px, black 9px)",
+                  WebkitMaskComposite: "source-in",
+                } as React.CSSProperties}
+              >
+              <Dialog.Close
+                onClick={handleClose}
+                className="absolute right-4 top-[82px] z-10 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                aria-label="Stäng"
+              >
+                <X size={15} />
+              </Dialog.Close>
+
+              <div className={cn(garamond.className, "px-8 pb-6 pt-[82px]")}>
+                <Dialog.Title className="text-2xl font-bold text-brand-navy">
+                  Begär offert
+                </Dialog.Title>
+                <Dialog.Description className="mt-0.5 text-base text-gray-500">
+                  Vi återkommer inom 24 timmar.
+                </Dialog.Description>
+
                 {sent ? (
-                  <div className="mt-10 flex flex-col items-center gap-4 text-center pb-4">
-                    <div className="flex size-16 items-center justify-center rounded-full bg-brand-orange/10">
-                      <CheckCircle2 size={32} className="text-brand-orange" />
+                  <div className="mt-7 flex flex-col items-center gap-3 text-center pb-1">
+                    <div className="flex size-14 items-center justify-center rounded-full bg-brand-orange/10">
+                      <CheckCircle2 size={26} className="text-brand-orange" />
                     </div>
-                    <div>
-                      <p className="text-xl font-semibold text-black drop-shadow-sm">
-                        Tack för din förfrågan!
-                      </p>
-                      <p className="mt-2 text-base text-black drop-shadow-sm">
-                        Vi hör av oss till{" "}
-                        <span className="font-medium text-black">{form.epost}</span>{" "}
-                        så snart som möjligt.
-                      </p>
-                    </div>
+                    <p className="text-xl font-semibold text-brand-navy">Tack för din förfrågan!</p>
+                    <p className="text-base text-gray-600">
+                      Vi hör av oss till{" "}
+                      <span className="font-medium text-brand-navy">{form.epost}</span>{" "}
+                      så snart som möjligt.
+                    </p>
                     <button
                       onClick={handleClose}
-                      className="mt-2 rounded-xl bg-brand-navy px-6 py-2.5 text-base font-medium text-white transition-colors hover:bg-brand-navy/85"
+                      className="mt-1 cursor-pointer rounded-lg bg-brand-navy px-5 py-2 text-base font-medium text-white transition-colors hover:bg-brand-navy/85"
                     >
                       Stäng
                     </button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <Field label="Namn" required>
-                        <input
-                          type="text"
-                          required
-                          placeholder="Anna Karlsson"
-                          value={form.namn}
-                          onChange={set("namn")}
-                          className={inputClass}
-                        />
-                      </Field>
-                      <Field label="Telefonnummer">
-                        <input
-                          type="tel"
-                          placeholder="070-000 00 00"
-                          value={form.telefon}
-                          onChange={set("telefon")}
-                          className={inputClass}
-                        />
-                      </Field>
-                    </div>
+                  <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-3">
+                    <Field label="Namn" required>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Anna Karlsson"
+                        value={form.namn}
+                        onChange={set("namn")}
+                        className={inputClass}
+                      />
+                    </Field>
 
-                    <Field label="E-postadress" required>
+                    <Field label="Telefon">
+                      <input
+                        type="tel"
+                        placeholder="070-000 00 00"
+                        value={form.telefon}
+                        onChange={set("telefon")}
+                        className={inputClass}
+                      />
+                    </Field>
+
+                    <Field label="E-post" required>
                       <input
                         type="email"
                         required
@@ -193,21 +231,17 @@ export default function QuoteModal() {
                         onChange={set("tjanst")}
                         className={cn(inputClass, "appearance-none cursor-pointer")}
                       >
-                        <option value="" disabled>
-                          Välj tjänst…
-                        </option>
+                        <option value="" disabled>Välj tjänst…</option>
                         {SERVICES.map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
+                          <option key={s} value={s}>{s}</option>
                         ))}
                       </select>
                     </Field>
 
-                    <Field label="Beskriv ditt projekt">
+                    <Field label="Beskriv projektet">
                       <textarea
-                        rows={4}
-                        placeholder="Berätta kort om vad du behöver hjälp med, var projektet ska genomföras och eventuell tidsram…"
+                        rows={3}
+                        placeholder="Berätta kort om vad du behöver hjälp med…"
                         value={form.meddelande}
                         onChange={set("meddelande")}
                         className={cn(inputClass, "resize-none")}
@@ -217,29 +251,30 @@ export default function QuoteModal() {
                     <button
                       type="submit"
                       disabled={sending}
-                      className="group mt-2 flex w-full cursor-pointer items-center justify-center rounded-xl border-2 border-black bg-transparent py-3 text-base font-semibold text-black shadow-sm transition-all outline-none hover:bg-black/10 focus:ring-2 focus:ring-black/20 disabled:opacity-60"
+                      className="group mt-1 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-brand-navy py-2.5 text-base font-semibold text-white transition-all hover:bg-brand-navy/85 focus:ring-2 focus:ring-brand-navy/20 disabled:opacity-60"
                     >
                       {sending ? (
                         <>
-                          <span className="size-4 animate-spin rounded-full border-2 border-black/30 border-t-black" />
+                          <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                           Skickar…
                         </>
                       ) : (
-                        <span className="flex items-center gap-2 transition-transform duration-200 group-hover:scale-110">
-                          <Send size={15} />
+                        <>
+                          <Send size={13} />
                           Skicka förfrågan
-                        </span>
+                        </>
                       )}
                     </button>
 
-                    <p className="text-center text-base text-black drop-shadow-sm">
+                    <p className="text-center text-sm text-gray-400">
                       Inga bindande avtal — bara ett förutsättningslöst samtal.
                     </p>
                   </form>
                 )}
-            </div>
-            </div>
-          </div>
+              </div>
+              </div>{/* end sign panel */}
+            </div>{/* end wrapper */}
+          </motion.div>
         </Dialog.Popup>
       </Dialog.Portal>
     </Dialog.Root>
