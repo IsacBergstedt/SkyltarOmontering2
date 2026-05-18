@@ -53,7 +53,7 @@ export default function Hero() {
           <motion.div {...fadeUp(0)}>
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-4 py-1.5 text-sm font-medium text-brand-orange">
               <span className="size-1.5 animate-pulse rounded-full bg-brand-orange" />
-              Certifierad &amp; Försäkrad
+              Garanterat &amp; Försäkrad
             </span>
           </motion.div>
 
@@ -91,8 +91,7 @@ export default function Hero() {
             {...fadeUp(0.3)}
             className="mt-6 max-w-xl text-lg leading-relaxed text-white/65 lg:text-xl"
           >
-            Vi installerar skyltar, fordonsfolier och fönsterfilm med precision
-            och erfarenhet — alltid i tid, alltid med kvalitet.
+            Vi installerar skyltar, fordonsfolier och fönsterfilm med erfarenhet — alltid i tid, alltid med kvalitet.
           </motion.p>
 
           {/* CTAs */}
@@ -107,7 +106,7 @@ export default function Hero() {
                 "gap-2 border-transparent bg-brand-orange text-white hover:bg-brand-orange/90"
               )}
             >
-              Få offert idag
+              Maila oss
               <ArrowRight size={17} />
             </button>
             <a
@@ -120,6 +119,14 @@ export default function Hero() {
               Se våra projekt
             </a>
           </motion.div>
+
+          {/* Phone */}
+          <motion.p {...fadeUp(0.55)} className="mt-4 text-sm text-white/50">
+            Eller ring oss på:{" "}
+            <a href="tel:0708321225" className="text-white/75 hover:text-white transition-colors">
+              070-832 12 25
+            </a>
+          </motion.p>
 
           {/* Stats */}
           <motion.div

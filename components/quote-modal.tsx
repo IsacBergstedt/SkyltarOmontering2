@@ -114,7 +114,7 @@ export default function QuoteModal() {
             <img
               src="/images/jagtappardet.png"
               alt=""
-              className="relative z-10 w-full h-[438px] object-cover object-center pointer-events-none select-none"
+              className="relative z-10 w-full h-[458px] object-cover object-center pointer-events-none select-none"
               draggable={false}
             />
 
@@ -123,20 +123,20 @@ export default function QuoteModal() {
 
               {/* Grommet rings — siblings of sign so the sign's CSS mask does NOT clip them */}
               <div
-                className="pointer-events-none absolute z-[25] size-8 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                className="pointer-events-none absolute z-[25] size-6 -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{
                   top: "47px",
-                  left: "calc(50% - 187px)",
+                  left: "calc(50% - 230px)",
                   background:
                     "radial-gradient(circle, transparent 0 100%, #777 100%, #ccc 47%, #aaa 55%, #e0e0e0 63%, #999 71%, transparent 76%)",
                   filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.65))",
                 }}
               />
               <div
-                className="pointer-events-none absolute z-[25] size-8 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                className="pointer-events-none absolute z-[25] size-6 -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{
                   top: "47px",
-                  left: "calc(50% + 187px)",
+                  left: "calc(50% + 230px)",
                   background:
                     "radial-gradient(circle, transparent 0 100%, #777 100%, #ccc 47%, #aaa 55%, #e0e0e0 63%, #999 71%, transparent 76%)",
                   filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.65))",
@@ -150,27 +150,31 @@ export default function QuoteModal() {
                   "shadow-[0_30px_90px_-10px_rgba(0,0,0,0.55),0_10px_30px_-5px_rgba(0,0,0,0.2)]",
                 )}
                 style={{
-                  mask: "radial-gradient(circle 8px at calc(50% - 183px) 47px, transparent 8px, black 9px), radial-gradient(circle 8px at calc(50% + 183px) 47px, transparent 8px, black 9px)",
+                  mask: "radial-gradient(circle 6px at calc(50% - 191px) 20px, transparent 6px, black 7px), radial-gradient(circle 6px at calc(50% + 191px) 20px, transparent 6px, black 7px)",
                   maskComposite: "intersect",
-                  WebkitMask: "radial-gradient(circle 8px at calc(50% - 183px) 47px, transparent 8px, black 9px), radial-gradient(circle 8px at calc(50% + 183px) 47px, transparent 8px, black 9px)",
+                  WebkitMask: "radial-gradient(circle 6px at calc(50% - 191px) 20px, transparent 6px, black 7px), radial-gradient(circle 6px at calc(50% + 191px) 20px, transparent 6px, black 7px)",
                   WebkitMaskComposite: "source-in",
                 } as React.CSSProperties}
               >
               <Dialog.Close
                 onClick={handleClose}
-                className="absolute right-4 top-[82px] z-10 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                className="absolute right-3 top-3 max-[500px]:top-[22px] z-10 rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
                 aria-label="Stäng"
               >
                 <X size={15} />
               </Dialog.Close>
 
-              <div className={cn(garamond.className, "px-8 pb-6 pt-[82px]")}>
-                <Dialog.Title className="text-2xl font-bold text-brand-navy">
+              {/* Title block — sits just below the grommet holes at y=47px */}
+              <div className={cn(garamond.className, "absolute left-0 right-0 flex flex-col items-center text-center px-16")} style={{ top: "56px" }}>
+                <Dialog.Title className="text-2xl font-bold text-brand-navy leading-tight">
                   Begär offert
                 </Dialog.Title>
-                <Dialog.Description className="mt-0.5 text-base text-gray-500">
+                <Dialog.Description className="text-sm text-gray-500 leading-tight">
                   Vi återkommer inom 24 timmar.
                 </Dialog.Description>
+              </div>
+
+<div className={cn(garamond.className, "px-8 pb-6 pt-[94px]")}>
 
                 {sent ? (
                   <div className="mt-7 flex flex-col items-center gap-3 text-center pb-1">
@@ -267,7 +271,7 @@ export default function QuoteModal() {
                     </button>
 
                     <p className="text-center text-sm text-gray-400">
-                      Inga bindande avtal — bara ett förutsättningslöst samtal.
+                      Inga bindande avtal — du kan även höra av dig på: 070-832 12 25.
                     </p>
                   </form>
                 )}

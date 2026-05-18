@@ -29,7 +29,7 @@ export default function Footer() {
               Skyltar&nbsp;<span className="text-brand-orange">O</span>&nbsp;Montering
             </p>
             <p className="mt-4 text-sm leading-relaxed text-white/55">
-              Professionell skyltmontering, fordonsfoliering och fönsterfilm sedan
+              Professionell skyltmontering, fordonsfoliering och fönsterfilm i
               över 30 år. Vi levererar kvalitet med precision — alltid i tid.
             </p>
           </div>
@@ -75,26 +75,26 @@ export default function Footer() {
             <ul className="mt-4 space-y-4">
               <li>
                 <a
-                  href="tel:+46701234567"
+                  href="tel:+46708321225"
                   className="flex items-start gap-3 text-sm text-white/65 transition-colors hover:text-white"
                 >
                   <Phone size={15} className="mt-0.5 shrink-0 text-brand-orange" />
-                  070-123 45 67
+                  070-832 12 25
                 </a>
               </li>
               <li>
                 <a
-                  href="mailto:info@skyltmontering.se"
+                  href="mailto:skyltaromontering@gmail.com"
                   className="flex items-start gap-3 text-sm text-white/65 transition-colors hover:text-white"
                 >
                   <Mail size={15} className="mt-0.5 shrink-0 text-brand-orange" />
-                  info@skyltmontering.se
+                  skyltaromontering@gmail.com
                 </a>
               </li>
               <li>
                 <span className="flex items-start gap-3 text-sm text-white/65">
                   <MapPin size={15} className="mt-0.5 shrink-0 text-brand-orange" />
-                  Industrivägen 12, 123 45 Stockholm
+                  Stockholm, men vi utför jobb i hela Sverige!
                 </span>
               </li>
             </ul>
@@ -105,7 +105,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-6 py-5 text-xs text-white/35 sm:flex-row lg:px-8">
-          <p>© {new Date().getFullYear()} Skyltar O Montering. Alla rättigheter förbehållna.</p>
+          <p>© {new Date().getFullYear()} Skyltar O Montering.</p>
           <div className="flex gap-5">
             <Link href="#" className="transition-colors hover:text-white/60">
               Integritetspolicy
