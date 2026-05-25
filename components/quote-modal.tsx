@@ -167,7 +167,7 @@ export default function QuoteModal() {
               {/* Title block — sits just below the grommet holes at y=47px */}
               <div className={cn(garamond.className, "absolute left-0 right-0 flex flex-col items-center text-center px-16")} style={{ top: "56px" }}>
                 <Dialog.Title className="text-2xl font-bold text-brand-navy leading-tight">
-                  Begär offert
+                  Kontakta oss.
                 </Dialog.Title>
                 <Dialog.Description className="text-sm text-gray-500 leading-tight">
                   Vi återkommer inom 24 timmar.

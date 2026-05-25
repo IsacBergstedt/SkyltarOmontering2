@@ -96,16 +96,15 @@ export default function About() {
               {...fadeUp(0.1)}
               className="mt-5 text-3xl font-bold leading-[1.15] tracking-tight text-white sm:text-4xl lg:text-5xl"
             >
-              Passion för skyltar.{" "}
-              <span className="text-brand-orange">Stolthet i arbetet.</span>
+              {" "}
+              <span className="text-brand-orange">Montering som håller.</span>
             </motion.h2>
 
             <motion.p
               {...fadeUp(0.2)}
               className="mt-6 text-lg leading-relaxed text-white/60"
             >
-              Skyltar O Montering grundades av hantverkare med en enkel övertygelse: rätt
-              monterad skylt ska synas, hålla och representera ditt varumärke på
+              Rätt monterad skylt ska synas, hålla och representera ditt varumärke på
               bästa möjliga sätt. 
             </motion.p>
 
@@ -114,7 +113,7 @@ export default function About() {
               className="mt-4 text-lg leading-relaxed text-white/60"
             >
               Vi är alltid behjälpliga och anpassningsbara efter dina behov. 
-              — från mätning och offert till
+              — från mätning till
               slutbesiktning.
             </motion.p>
 
@@ -166,7 +165,7 @@ export default function About() {
                 
               </p>
               <p className="relative mt-3 text-xl font-semibold leading-snug sm:text-2xl">
-                Alltid anpassningsbara på plats, alltid 
+                Alltid anpassningsbara på plats efter dina önskemål
               </p>
               <p className="relative mt-4 text-sm text-white/70">
                 
