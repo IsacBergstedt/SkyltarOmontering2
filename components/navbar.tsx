@@ -85,7 +85,7 @@ export default function Navbar() {
                 "hidden border-transparent bg-brand-orange text-white hover:bg-brand-orange/90 lg:inline-flex"
               )}
             >
-              Få offert idag
+              Kontakta oss idag
             </button>
 
             {/* Mobile hamburger */}
@@ -131,7 +131,7 @@ export default function Navbar() {
                     "w-full border-transparent bg-brand-orange text-white hover:bg-brand-orange/90"
                   )}
                 >
-                  Få offert idag
+                  Kontakta oss idag
                 </button>
               </div>
             </div>

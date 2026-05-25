@@ -1,16 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Car01Icon,
-  Building04Icon,
-  Layers01Icon,
-  ShopSignIcon,
-  SpotlightIcon,
-} from "@hugeicons/core-free-icons";
+import { ArrowUpRight, X } from "lucide-react";
+import Image from "next/image";
+import { useQuoteModal } from "@/context/quote-modal";
 
 const EASE: [number, number, number, number] = [0.21, 0.47, 0.32, 0.98];
 
@@ -29,77 +23,63 @@ type PortfolioItem = {
   subtitle: string;
   category: Exclude<Category, "Alla">;
   description: string;
-  gradientFrom: string;
-  gradientTo: string;
-  icon: Parameters<typeof HugeiconsIcon>[0]["icon"];
+  image: string;
 };
 
 const ITEMS: PortfolioItem[] = [
   {
     id: 1,
-    title: "Scania Lastbilsflotta",
-    subtitle: "3 fordon, helfoliering",
-    category: "Fordonsfoliering",
+    title: "Foliering av takfönster",
+    subtitle: "Kommersiell lokal, inomhus",
+    category: "Fönsterfoliering",
     description:
-      "Heltäckande reklamfoliering av tre Scania-lastbilar med tryckt grafik för ett regionalt byggföretag.",
-    gradientFrom: "#0A2540",
-    gradientTo: "#0d3d6a",
-    icon: Car01Icon,
+      "Färgad folie monterad på stora takfönster och glaspartier i en kommersiell inomhusmiljö, utförd från stege med noggrann passning mot profilerade ramar.",
+    image: "/images/skylt1%20(1).jpeg",
   },
   {
     id: 2,
-    title: "ICA Kvantum Fasadskylt",
-    subtitle: "Externfasad, LED-belyst",
-    category: "Fasadskyltar",
+    title: "Solna Stad – Stadsgateskylt",
+    subtitle: "Utomhusskylt, kommunalt uppdrag",
+    category: "Skyltmontering",
     description:
-      "Montage av stor LED-belyst fasadskylt i rostfritt stål och akryl på köpcentrumets ytterfasad.",
-    gradientFrom: "#1c1917",
-    gradientTo: "#2e231a",
-    icon: Building04Icon,
+      "Montering av stor grön informationsskylt åt Solna Stad med budskapet \"Här är en trivsam stadsgata!\" – placerad längs gata under pågående stadsbyggnadsprojekt.",
+    image: "/images/skylt1%20(2).jpeg",
   },
   {
     id: 3,
-    title: "BMW Showroom Fönsterfilm",
-    subtitle: "700 m² kontorsglas",
-    category: "Fönsterfoliering",
+    title: "Välkomstskylt Haninge",
+    subtitle: "Kommunal entrémarkering",
+    category: "Skyltmontering",
     description:
-      "Solavskärmande och integritetsskyddande fönsterfilm monterad på hela showroomets glasfasad.",
-    gradientFrom: "#0d2d2a",
-    gradientTo: "#1a4540",
-    icon: Layers01Icon,
+      "Mörkgrå välkomstskylt med Haninge kommuns logotyp och texten \"Välkommen till Haninge\", monterad vid kommunens infart som en tydlig och professionell entrémarkering.",
+    image: "/images/skylt1%20(3).jpeg",
   },
   {
     id: 4,
-    title: "Restaurang Centro",
-    subtitle: "Entré & menyskyltning",
+    title: "Förskolan Vinjegatan 23",
+    subtitle: "Fasadskylt, kommunalt uppdrag",
     category: "Skyltmontering",
     description:
-      "Komplett skyltpaket: entrélogga i mässing, menytavlor och vägledningsskyltar i rostfritt stål.",
-    gradientFrom: "#1e1b4b",
-    gradientTo: "#2d2870",
-    icon: ShopSignIcon,
+      "Montering av institutionsskylt på förskolas träfasad i Haninge, utförd från stege. Skylten bär Haninge kommuns profil med logotyp, namn och adress.",
+    image: "/images/skylt1%20(4).jpeg",
   },
   {
     id: 5,
-    title: "Volvo V90 Fleet Wrap",
-    subtitle: "12 bilar, delfoliering",
-    category: "Fordonsfoliering",
+    title: "Lyftkorgsmontage – Solna Stad",
+    subtitle: "Storformat, kommunal skyltning",
+    category: "Skyltmontering",
     description:
-      "Enhetlig delfoliering av hela flottan med logotyp, webbadress och kontaktuppgifter.",
-    gradientFrom: "#0f1923",
-    gradientTo: "#1a2d3f",
-    icon: Car01Icon,
+      "Montage av storformatsskylt åt Solna Stad med hjälp av lyftkorg för säker och precis placering på hög höjd. Samma skyltserie som stadsgateskyltarna längs ombyggda gator.",
+    image: "/images/skylt1%20(5).jpeg",
   },
   {
     id: 6,
-    title: "Centrumhuset Ljusskylt",
-    subtitle: "Takmontering, dubbelsidigt",
-    category: "Fasadskyltar",
+    title: "Butiksfönster Helfoliering",
+    subtitle: "Centrumläge, vit avskärmningsfolie",
+    category: "Fönsterfoliering",
     description:
-      "Dubbelsidigt monterad ljusskylt på taknocken med intern LED och automatisk dygnsljusstyrning.",
-    gradientFrom: "#1a1a2e",
-    gradientTo: "#16213e",
-    icon: SpotlightIcon,
+      "Heltäckande vit folie monterad på butiksfönster i stadsmiljö, för avskärmning under renovering. Ger ett städat och enhetligt intryck mot gatan under byggtiden.",
+    image: "/images/skylt1%20(6).jpeg",
   },
 ];
 
@@ -128,6 +108,15 @@ const cardVariants: Variants = {
 
 export default function Portfolio() {
   const [active, setActive] = useState<Category>("Alla");
+  const [lightbox, setLightbox] = useState<PortfolioItem | null>(null);
+  const { openModal } = useQuoteModal();
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setLightbox(null); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [lightbox]);
 
   const filtered =
     active === "Alla" ? ITEMS : ITEMS.filter((i) => i.category === active);
@@ -145,17 +134,14 @@ export default function Portfolio() {
         >
           <div>
             <span className="inline-block rounded-full border border-brand-navy/15 bg-brand-navy/5 px-4 py-1.5 text-sm font-medium text-brand-navy">
-              Portfolio
+              Tidigare arbeten
             </span>
             <h2 className="mt-4 text-3xl font-bold tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
-              Projekt vi är{" "}
-              <span className="text-brand-orange">stolta över</span>
+              Projekt vi genomfört
+              
             </h2>
           </div>
-          <p className="max-w-xs text-sm leading-relaxed text-gray-500 sm:text-right">
-            Ett urval av genomförda projekt. Varje uppdrag utförs med samma höga
-            standard.
-          </p>
+        
         </motion.div>
 
         {/* Category filter */}
@@ -195,34 +181,16 @@ export default function Portfolio() {
           >
             {filtered.map((item) => (
               <motion.li key={item.id} variants={cardVariants}>
-                <article className="group relative overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-xl">
-                  {/* Image placeholder */}
-                  <div className="aspect-[4/3] w-full">
-                    {/* Gradient bg */}
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background: `linear-gradient(135deg, ${item.gradientFrom} 0%, ${item.gradientTo} 100%)`,
-                      }}
+                <article onClick={() => setLightbox(item)} className="group relative cursor-pointer overflow-hidden rounded-2xl shadow-sm transition-shadow duration-300 hover:shadow-xl">
+                  {/* Image */}
+                  <div className="relative aspect-[4/3] w-full">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
-                    {/* Dot pattern texture */}
-                    <div
-                      className="absolute inset-0 opacity-[0.07]"
-                      style={{
-                        backgroundImage:
-                          "radial-gradient(circle, white 1px, transparent 1px)",
-                        backgroundSize: "22px 22px",
-                      }}
-                    />
-                    {/* Decorative icon */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                      <HugeiconsIcon
-                        icon={item.icon}
-                        size={72}
-                        className="text-white"
-                        strokeWidth={1}
-                      />
-                    </div>
                   </div>
 
                   {/* Dark overlay on hover */}
@@ -240,11 +208,11 @@ export default function Portfolio() {
                   </div>
 
                   {/* Hover-revealed description + CTA */}
-                  <div className="absolute inset-x-0 bottom-0 translate-y-2 px-5 pb-5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <p className="mt-16 text-sm leading-relaxed text-white/80">
+                  <div className="absolute inset-x-0 top-0 -translate-y-2 px-5 pt-5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    <p className="text-sm leading-relaxed text-white/90">
                       {item.description}
                     </p>
-                    <div className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-brand-orange">
+                    <div className="mt-3 flex items-center gap-1.5 text-sm font-semibold text-brand-orange">
                       Se projekt
                       <ArrowUpRight size={15} />
                     </div>
@@ -263,18 +231,63 @@ export default function Portfolio() {
           transition={{ duration: 0.5, delay: 0.2, ease: EASE }}
           className="mt-14 text-center"
         >
-          <p className="text-sm text-gray-400">
-            Vill du se fler projekt eller diskutera ditt uppdrag?
-          </p>
-          <a
-            href="#kontakt"
+        
+          <button
+            onClick={openModal}
             className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-navy underline-offset-4 hover:text-brand-orange hover:underline transition-colors"
           >
             Kontakta oss idag
             <ArrowUpRight size={14} />
-          </a>
+          </button>
         </motion.div>
       </div>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+            onClick={() => setLightbox(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.25, ease: EASE }}
+              className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-black shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative aspect-[4/3] w-full">
+                <Image
+                  src={lightbox.image}
+                  alt={lightbox.title}
+                  fill
+                  className="object-contain"
+                  sizes="100vw"
+                />
+              </div>
+              <div className="px-6 py-4">
+                <span className="inline-block rounded-full bg-brand-orange/90 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white">
+                  {lightbox.category}
+                </span>
+                <h3 className="mt-2 text-lg font-bold text-white">{lightbox.title}</h3>
+                <p className="mt-1 text-sm text-white/60">{lightbox.subtitle}</p>
+                <p className="mt-2 text-sm leading-relaxed text-white/80">{lightbox.description}</p>
+              </div>
+              <button
+                onClick={() => setLightbox(null)}
+                className="absolute right-4 top-4 rounded-full bg-black/60 p-1.5 text-white hover:bg-black/90 transition-colors"
+              >
+                <X size={18} />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

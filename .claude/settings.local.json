@@ -14,7 +14,8 @@
       "Bash(npx next *)",
       "Bash(npx shadcn@latest *)",
       "Bash(Get-Content \"C:\\\\Users\\\\isacb\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Hemsidor-Skylttest-skylttest\\\\86b5fbf1-e296-4603-b61a-f9e06d557578\\\\tasks\\\\bj8zud3gs.output\" -Wait -Tail 30)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(Select-String \"next\")"
     ]
   }
 }

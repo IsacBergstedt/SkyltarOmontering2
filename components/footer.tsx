@@ -94,7 +94,7 @@ export default function Footer() {
               <li>
                 <span className="flex items-start gap-3 text-sm text-white/65">
                   <MapPin size={15} className="mt-0.5 shrink-0 text-brand-orange" />
-                  Stockholm, men vi utför jobb i hela Sverige!
+                  Främst i Stockholm, men utför jobb i hela Sverige!
                 </span>
               </li>
             </ul>

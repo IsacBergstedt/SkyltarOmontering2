@@ -53,7 +53,7 @@ export default function Hero() {
           <motion.div {...fadeUp(0)}>
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-orange/30 bg-brand-orange/10 px-4 py-1.5 text-sm font-medium text-brand-orange">
               <span className="size-1.5 animate-pulse rounded-full bg-brand-orange" />
-              Garanterat &amp; Försäkrad
+              Professionell montering
             </span>
           </motion.div>
 
@@ -91,7 +91,7 @@ export default function Hero() {
             {...fadeUp(0.3)}
             className="mt-6 max-w-xl text-lg leading-relaxed text-white/65 lg:text-xl"
           >
-            Vi installerar skyltar, fordonsfolier och fönsterfilm med erfarenhet — alltid i tid, alltid med kvalitet.
+            Med erfarenhet installerar vi skyltar, fordonsfolier, fönsterfolie - och mycket mer.
           </motion.p>
 
           {/* CTAs */}

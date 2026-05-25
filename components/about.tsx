@@ -16,18 +16,18 @@ function fadeUp(delay = 0) {
 }
 
 const VALUES = [
-  "Certifierade montörer med gedigen yrkeserfarenhet",
-  "Vi levererar alltid i tid — utan krångel",
-  "Kvalitetsmaterial från ledande leverantörer",
-  "Fullständigt försäkrade för alla uppdrag",
-  "Personlig kontakt från offert till färdig installation",
+  "Montörer med gedigen yrkeserfarenhet",
+  "Monterar hela Sverige - utan krångel",
+  "Kvalitetsmaterial som monteras för att hålla",
+  "Flexibla lösningar anpassade efter dina behov",
+  "Personlig kontakt från start till färdig installation",
 ];
 
 const STATS = [
   { value: "30+", label: "Års erfarenhet" },
   { value: "5 000+", label: "Genomförda uppdrag" },
-  { value: "100%", label: "Nöjda kunder" },
-  { value: "3", label: "Städer vi är aktiva i" },
+  { value: "Alltid", label: "Nöjda kunder" },
+  { value: "Hela Sverige", label: "Monterar vi" },
 ];
 
 function StatCard({
@@ -104,18 +104,18 @@ export default function About() {
               {...fadeUp(0.2)}
               className="mt-6 text-lg leading-relaxed text-white/60"
             >
-              Skylttest grundades av hantverkare med en enkel övertygelse: rätt
+              Skyltar O Montering grundades av hantverkare med en enkel övertygelse: rätt
               monterad skylt ska synas, hålla och representera ditt varumärke på
-              bästa möjliga sätt. I dag är vi ett av regionens mest anlitade
-              företag inom skyltmontering och foliering.
+              bästa möjliga sätt. 
             </motion.p>
 
             <motion.p
               {...fadeUp(0.3)}
               className="mt-4 text-lg leading-relaxed text-white/60"
             >
-              Vi tar hand om hela processen — från mätning och offert till
-              slutbesiktning — så att du kan fokusera på din verksamhet.
+              Vi är alltid behjälpliga och anpassningsbara efter dina behov. 
+              — från mätning och offert till
+              slutbesiktning.
             </motion.p>
 
             {/* Values checklist */}
@@ -163,14 +163,13 @@ export default function About() {
                 className="absolute -bottom-10 -left-6 size-32 rounded-full bg-white/8"
               />
               <p className="relative text-sm font-medium uppercase tracking-widest text-white/75">
-                Vår filosofi
+                
               </p>
               <p className="relative mt-3 text-xl font-semibold leading-snug sm:text-2xl">
-                &ldquo;Vi mäter två gånger och monterar en — för att det ska
-                sitta rätt från start.&rdquo;
+                Alltid anpassningsbara på plats, alltid 
               </p>
               <p className="relative mt-4 text-sm text-white/70">
-                — Grundarna av Skylttest
+                
               </p>
             </motion.div>
 

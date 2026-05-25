@@ -41,7 +41,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+      <span className="text-sm font-bold uppercase tracking-wide text-gray-600">
         {label}
         {required && <span className="ml-0.5 text-brand-orange">*</span>}
       </span>
@@ -270,7 +270,7 @@ export default function QuoteModal() {
                       )}
                     </button>
 
-                    <p className="text-center text-sm text-gray-400">
+                    <p className="text-center text-sm text-brand-navy/55">
                       Inga bindande avtal — du kan även höra av dig på: 070-832 12 25.
                     </p>
                   </form>
