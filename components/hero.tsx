@@ -76,7 +76,7 @@ export default function Hero() {
               style={{ transformOrigin: "top center" }}
             >
               <Image
-                src="/images/heroskyltmetall.png"
+                src="/images/Steelplatefinished.png"
                 alt="Skyltar som syns. Montering som håller."
                 width={1400}
                 height={700}
@@ -91,7 +91,7 @@ export default function Hero() {
             {...fadeUp(0.3)}
             className="mt-6 max-w-xl text-lg leading-relaxed text-white/65 lg:text-xl"
           >
-            Med erfarenhet installerar vi skyltar, fordonsfolier, fönsterfolie - och mycket mer.
+            Med erfarenhet installerar vi skyltar, fordonsfolier, fönsterfolier - och mycket mer.
           </motion.p>
 
           {/* CTAs */}
